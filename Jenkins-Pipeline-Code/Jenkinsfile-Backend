@@ -18,7 +18,7 @@ pipeline {
         }
         stage('Checkout from Git') {
             steps {
-                git branch: 'main', git credentialsId: 'GITHUB', url: 'https://github.com/gmanne11/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
+                git branch: 'main', credentialsId: 'GITHUB', url: 'https://github.com/gmanne11/End-to-End-Kubernetes-Three-Tier-DevSecOps-Project.git'
             }
         }
         stage('Sonarqube Analysis') {
@@ -70,9 +70,7 @@ pipeline {
         stage("ECR Image Pushing") {
             steps {
                 script {
-                    // Login to AWS ECR
                     sh 'aws ecr get-login-password --region ${AWS_DEFAULT_REGION} | docker login --username AWS --password-stdin ${REPOSITORY_URI}'
-                    // Tag and push the Docker image
                     sh 'docker tag ${AWS_ECR_REPO_NAME} ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
                     sh 'docker push ${REPOSITORY_URI}${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}'
                 }
