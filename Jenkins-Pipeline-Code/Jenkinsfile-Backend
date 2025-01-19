@@ -91,13 +91,12 @@ pipeline {
                 GIT_USER_NAME = "gmanne11"
             }
             steps {
-                dir('Kubernetes-Manifests-file/backend') {
+                dir('Kubernetes-Manifests-file/Backend') {
                     withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
                         sh '''
                             git config user.email "gopim4959@gmail.com"
                             git config user.name "gmanne11"
                             BUILD_NUMBER=${BUILD_NUMBER}
-                            imageTag=$(grep -oP '(?<=backend:)[^ ]+' deployment.yaml)
                             sed -i "s/${AWS_ECR_REPO_NAME}:${imageTag}/${AWS_ECR_REPO_NAME}:${BUILD_NUMBER}/" deployment.yaml
                             git add deployment.yaml
                             git commit -m "Update deployment Image to version ${BUILD_NUMBER}"

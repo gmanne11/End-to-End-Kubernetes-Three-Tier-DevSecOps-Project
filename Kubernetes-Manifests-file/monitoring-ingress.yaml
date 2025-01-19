@@ -2,7 +2,7 @@ apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
   name: mainlb
-  namespace: three-tier
+  namespace: monitoring
   annotations:
     alb.ingress.kubernetes.io/scheme: internet-facing
     alb.ingress.kubernetes.io/target-type: ip
@@ -15,38 +15,19 @@ spec:
     - host: vivekmannedevops.in
       http:
         paths:
-          - path: /api
+          - path: /grafana
             pathType: Prefix
             backend:
               service:
-                name: api
-                port:
-                  number: 3500
-          - path: /healthz
-            pathType: Exact
-            backend:
-              service:
-                name: api
-                port:
-                  number: 3500
-          - path: /ready
-            pathType: Exact
-            backend:
-                service:
-                  name: api
-                  port:
-                    number: 3500
-          - path: /started
-            pathType: Exact
-            backend:
-              service:
-                name: api
-                port:
-                  number: 3500
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: frontend
+                name: grafana
                 port:
                   number: 3000
+          - path: /prometheus
+            pathType: Prefix
+            backend:
+              service:
+                name: prometheus
+                port:
+                  number: 9090
+          
+          
